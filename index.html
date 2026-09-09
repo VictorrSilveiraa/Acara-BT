@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f7f4" />
+    <title>Rota Certa — Monitor de passagens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">↗</span><span>rota certa</span></a>
+      <div class="header-actions">
+        <button class="icon-button" aria-label="Notificações">♧<span class="notification-dot"></span></button>
+        <div class="avatar" aria-label="Perfil de Marina">MA</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">PAINEL DE MONITORAMENTO</p>
+          <h1>Olá, Marina! <span>✈</span></h1>
+          <p class="hero-copy">Acompanhe os preços e descubra o melhor momento para comprar.</p>
+        </div>
+        <button class="primary-button" id="open-form"><span>＋</span> Adicionar pesquisa</button>
+      </section>
+
+      <section class="stats" aria-label="Resumo dos preços">
+        <article class="stat-card featured">
+          <div class="stat-icon">↘</div>
+          <div><p>MENOR PREÇO ENCONTRADO</p><strong id="lowest-price">R$ 1.847</strong><span id="lowest-detail">Ida e volta · 1 pessoa</span></div>
+          <span class="tag good">Melhor oferta</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon">◎</div>
+          <div><p>PREÇO MÉDIO</p><strong id="average-price">R$ 2.214</strong><span>Últimos 7 dias</span></div>
+          <span class="trend down">↘ 8%</span>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon">▱</div>
+          <div><p>PESQUISAS REGISTRADAS</p><strong id="search-count">12</strong><span id="today-count">3 adicionadas hoje</span></div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel chart-panel">
+          <div class="panel-head">
+            <div><h2>Evolução dos preços</h2><p>Compare os valores das suas pesquisas</p></div>
+            <select id="period-filter" aria-label="Período do gráfico"><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option></select>
+          </div>
+          <div class="legend"><span><i class="dot teal"></i> Ida e volta</span><span><i class="dot coral"></i> Só ida</span><span><i class="dot navy"></i> Só volta</span></div>
+          <div class="chart-wrap"><svg id="price-chart" role="img" aria-label="Gráfico de evolução dos preços"></svg></div>
+        </article>
+
+        <aside class="panel insight-panel">
+          <div class="insight-icon">✦</div>
+          <p class="eyebrow">INSIGHT DO DIA</p>
+          <h2>Os preços caíram <em>8%</em> desde segunda-feira.</h2>
+          <p>O menor valor aparece para <strong>1 pessoa, ida e volta</strong>. Pode ser uma boa hora para reservar!</p>
+          <div class="insight-route"><span>GRU</span><div><small>10h 35min</small><i></i><b>✈</b></div><span>LIS</span></div>
+          <button id="show-best">Ver melhor oferta <span>→</span></button>
+        </aside>
+      </section>
+
+      <section class="panel history-panel">
+        <div class="panel-head history-head">
+          <div><h2>Histórico de pesquisas</h2><p>Todos os preços que você registrou</p></div>
+          <div class="filters">
+            <label class="search-box">⌕ <input id="search-input" type="search" placeholder="Buscar por origem ou destino" /></label>
+            <select id="trip-filter" aria-label="Filtrar por tipo"><option value="all">Todos os tipos</option><option value="round">Ida e volta</option><option value="outbound">Só ida</option><option value="return">Só volta</option></select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>DATA DA PESQUISA</th><th>ROTA</th><th>TIPO</th><th>VIAJANTES</th><th>VALOR TOTAL</th><th>POR PESSOA</th><th>STATUS</th><th></th></tr></thead>
+            <tbody id="history-body"></tbody>
+          </table>
+          <div id="empty-state" class="empty-state" hidden>Nenhuma pesquisa encontrada.</div>
+        </div>
+        <div class="table-footer"><span id="results-label"></span><button id="load-more">Carregar mais</button></div>
+      </section>
+    </main>
+
+    <dialog id="entry-dialog">
+      <form id="entry-form">
+        <div class="modal-head"><div><p class="eyebrow">NOVA COTAÇÃO</p><h2>Adicionar pesquisa</h2></div><button type="button" class="close-button" id="close-form" aria-label="Fechar">×</button></div>
+        <div class="form-grid">
+          <label>Origem<input name="origin" maxlength="3" placeholder="GRU" required /></label>
+          <label>Destino<input name="destination" maxlength="3" placeholder="LIS" required /></label>
+          <label>Tipo de viagem<select name="type"><option value="round">Ida e volta</option><option value="outbound">Só ida</option><option value="return">Só volta</option></select></label>
+          <label>Viajantes<input name="travelers" type="number" min="1" max="20" value="1" required /></label>
+          <label>Valor total (R$)<input name="price" type="number" min="1" step="0.01" placeholder="1847,00" required /></label>
+          <label>Data da pesquisa<input name="date" type="date" required /></label>
+        </div>
+        <div class="modal-actions"><button type="button" class="secondary-button" id="cancel-form">Cancelar</button><button class="primary-button" type="submit">Salvar pesquisa</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status">Pesquisa adicionada com sucesso!</div>
+    <script src="app.js"></script>
+  </body>
+</html>
